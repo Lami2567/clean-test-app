@@ -14,7 +14,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faEnvelope, faTableList, faClock, faUsers, faRightToBracket, faEye, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const API_URL = process.env.REACT_APP_API_URL;
-console.log(API_URL);
 function Login({ onLogin, isAuthenticated }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -229,13 +228,12 @@ function EmailSender({ user }) {
   useEffect(() => {
     const token = localStorage.getItem('jwt');
     let url = `${API_URL}/api/email/recipients`;
-    let params = '';
     if (recipient === 'class' && selectedClass) {
-      params = `?group=class&classId=${selectedClass}`;
+      url += `?group=class&classId=${selectedClass}`;
     } else if (recipient) {
-      params = `?group=${recipient}`;
+      url += `?group=${recipient}`;
     }
-    fetch(`${API_URL}${params ? '/api/email/recipients' + params : '/api/email/recipients'}`, {
+    fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.ok ? res.json() : Promise.reject())
